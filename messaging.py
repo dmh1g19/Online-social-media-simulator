@@ -2,6 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def generate_messages(G, num_messages=100, deception=0.5):
     """
     Generate messages for each node. Inauthentic nodes use deception to increase their message's appeal.
@@ -14,7 +15,7 @@ def generate_messages(G, num_messages=100, deception=0.5):
         inauthentic = data.get('inauthentic', False)
         messages = []
         for _ in range(num_messages):
-            base_appeal = np.random.rand()  # Base appeal for authentic nodes, rendom for now until I figure out how to properly derive it
+            base_appeal = np.random.rand()  # Base appeal for authentic nodes, random for now until I figure out how to properly derive it
             appeal = base_appeal + (deception if inauthentic else 0)
             messages.append({'appeal': appeal, 'origin': 'inauthentic' if inauthentic else 'authentic'})
         G.nodes[n]['messages'] = messages
