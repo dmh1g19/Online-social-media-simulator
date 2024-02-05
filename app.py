@@ -32,11 +32,6 @@ def main():
     # Generate messages
     #generate_messages(G, num_messages, theta) 
 
-    #graphs = Plotter(20, G)
-    #graphs.plot_social_media_network_no_infiltration()
-    #graphs.plot_network_with_infiltration()
-    #graphs.show_graphs()
-
     # Display content
     app = create_dash_app()
     make_layout(G, app)

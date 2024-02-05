@@ -6,7 +6,6 @@ import numpy as np
 from plotting import *
 import plotly.graph_objects as go
 
-
 def create_dash_app():
     return dash.Dash(__name__)
 
@@ -73,6 +72,10 @@ def make_layout(G, app):
                             id='tmp2',
                             figure=graphs.plot_degree_comparison_authentic_inauthentic()
                         ),
+                        dcc.Graph(
+                            id='tmp3',
+                            figure=graphs.graphs.plot_network_with_infiltration()
+                        ),
                     ],
                     style={'height': 'calc(100vh - 60px)', 'overflow-y': 'auto', 'width': '50%', 'display': 'inline-block', 'vertical-align': 'top'}
                 ),
@@ -80,3 +83,4 @@ def make_layout(G, app):
             style={'display': 'flex', 'flex-direction': 'row'}
         ),
     ])
+    
