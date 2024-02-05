@@ -5,6 +5,8 @@ import visdcc
 import numpy as np
 from plotting import *
 import plotly.graph_objects as go
+from dash.dependencies import Input, Output
+
 
 def create_dash_app():
     return dash.Dash(__name__)
@@ -32,9 +34,19 @@ def make_layout(G, app):
 
     app.layout = html.Div([
         html.Div(
-            html.H1("Dashboard", style={'text-align': 'center'}),
-            style={'margin-top': '20px'} 
-        ),
+            id='node-messages-display', 
+            style={'position': 'absolute', 
+                   'bottom': '10px', 
+                   'left': '10px', 
+                   'background': 'white', 
+                   'padding': '10px', 
+                   'border-radius': '5px', 
+                   'border': '2px solid #ddd', 
+                   'z-index': '1000', 
+                   'max-height': '200px', 
+                   'overflow-y': 'auto', 
+                   'height': '300px',
+                   'width': '200px'}),
         html.Div(
             [
                 html.Div(
@@ -72,10 +84,6 @@ def make_layout(G, app):
                             id='tmp2',
                             figure=graphs.plot_degree_comparison_authentic_inauthentic()
                         ),
-                        dcc.Graph(
-                            id='tmp3',
-                            figure=graphs.graphs.plot_network_with_infiltration()
-                        ),
                     ],
                     style={'height': 'calc(100vh - 60px)', 'overflow-y': 'auto', 'width': '50%', 'display': 'inline-block', 'vertical-align': 'top'}
                 ),
@@ -83,4 +91,28 @@ def make_layout(G, app):
             style={'display': 'flex', 'flex-direction': 'row'}
         ),
     ])
-    
+
+def register_callbacks(app, G):
+    @app.callback(
+        Output('node-messages-display', 'children'),
+        [Input('network-graph', 'selection')]
+    )
+    def display_node_messages(selection):
+        if selection is not None and 'nodes' in selection and len(selection['nodes']) > 0:
+            node_id = selection['nodes'][0]
+            messages = G.nodes[node_id].get('messages', [])
+
+            if messages:  
+                total_appeal = sum(msg['appeal'] for msg in messages)
+                avg_appeal = total_appeal / len(messages)
+            else:
+                avg_appeal = 0
+
+            messages_display = html.Div([
+                html.P(f"Total messages: {len(messages):.2f}"),
+                html.P(f"Average Appeal: {avg_appeal:.2f}"),
+                html.Ul([html.Li(f"Appeal: {msg['appeal']:.2f}, Origin: {msg['origin']}") for msg in messages])
+            ])
+
+            return messages_display
+        return "Click on a node to see its messages."

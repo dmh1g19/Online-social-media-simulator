@@ -10,25 +10,18 @@ class Plotter:
 
     def __init__(self, node_size, G):
         self.global_node_size = node_size
-        self.graphs_added = 0
         self.G = G
-        plt.figure(figsize=(8, 6))
 
-    def init_grid(self):
-        self.graphs_added += 1
-        plt.subplot(2,3,self.graphs_added)
+        self.authentic_nodes = [n for n, d in self.G.nodes(data=True) if not d.get('inauthentic', False)]
+        self.inauthentic_nodes = [n for n, d in self.G.nodes(data=True) if d.get('inauthentic', False)]
 
-    def show_graphs(self):
-        plt.show()
+        self.degrees_authentic = [self.G.degree(n) for n, d in self.G.nodes(data=True) if not d.get('inauthentic', False)]
+        self.degrees_inauthentic = [self.G.degree(n) for n, d in self.G.nodes(data=True) if d.get('inauthentic', False)]
 
 
     def plot_degree_distribution_by_type(self):
-
-        degrees_authentic = [self.G.degree(n) for n, d in self.G.nodes(data=True) if not d.get('inauthentic', False)]
-        degrees_inauthentic = [self.G.degree(n) for n, d in self.G.nodes(data=True) if d.get('inauthentic', False)]
-
-        degree_count_authentic = collections.Counter(degrees_authentic)
-        degree_count_inauthentic = collections.Counter(degrees_inauthentic)
+        degree_count_authentic = collections.Counter(self.degrees_authentic)
+        degree_count_inauthentic = collections.Counter(self.degrees_inauthentic)
 
         deg_authentic, cnt_authentic = zip(*degree_count_authentic.items())
         deg_inauthentic, cnt_inauthentic = zip(*degree_count_inauthentic.items())
@@ -49,13 +42,8 @@ class Plotter:
         return fig
 
     def plot_authentic_inauthentic_bar_chart(self):
-        self.init_grid()
-
-        authentic_nodes = [n for n, d in self.G.nodes(data=True) if not d.get('inauthentic', False)]
-        inauthentic_nodes = [n for n, d in self.G.nodes(data=True) if d.get('inauthentic', False)]
-
         categories = ['Authentic', 'Inauthentic']
-        values = [len(authentic_nodes), len(inauthentic_nodes)]
+        values = [len(self.authentic_nodes), len(self.inauthentic_nodes)]
 
         fig = go.Figure()
 
@@ -68,8 +56,6 @@ class Plotter:
         return fig
 
     def plot_degree_distribution(self):
-        self.init_grid()
-
         degrees = [self.G.degree(n) for n in self.G.nodes()]
         unique_degrees = list(set(degrees))
         count_degrees = [degrees.count(x) for x in unique_degrees]
@@ -88,15 +74,8 @@ class Plotter:
         return fig
 
     def plot_degree_comparison_authentic_inauthentic(self):
-        self.init_grid()
-
-        # Assuming the presence of an 'inauthentic' attribute that marks inauthentic nodes
-        authentic_degrees = [self.G.degree(n) for n, attrs in self.G.nodes(data=True) if not attrs.get('inauthentic', False)]
-        inauthentic_degrees = [self.G.degree(n) for n, attrs in self.G.nodes(data=True) if attrs.get('inauthentic', False)]
-
-        # Calculate total degrees
-        total_authentic_degrees = sum(authentic_degrees)
-        total_inauthentic_degrees = sum(inauthentic_degrees)
+        total_authentic_degrees = sum(self.degrees_authentic)
+        total_inauthentic_degrees = sum(self.degrees_inauthentic)
 
         categories = ['Authentic', 'Inauthentic']
         totals = [total_authentic_degrees, total_inauthentic_degrees]

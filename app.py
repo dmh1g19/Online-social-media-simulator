@@ -16,7 +16,7 @@ def main():
     m: Set amount of authentic nodes to follow by each inauthentic node
     """
 
-    n = 10
+    n = 50
     beta = 0.5
     gamma = 0.05 
     num_messages = 100
@@ -28,13 +28,13 @@ def main():
     G = create_authentic_subnetwork(n)
     add_inauthentic_subnetwork(G, beta, m)
     simulate_infiltration(G, gamma)
-
-    # Generate messages
-    #generate_messages(G, num_messages, theta) 
+    generate_messages(G, num_messages, theta) 
+    #reshare_messages(G)
 
     # Display content
     app = create_dash_app()
     make_layout(G, app)
+    register_callbacks(app, G)
     run_server(app)
 
 
