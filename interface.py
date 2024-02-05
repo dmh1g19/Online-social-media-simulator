@@ -16,10 +16,19 @@ def run_server(app):
 def make_layout(G, app):
     graphs = Plotter(20, G)
 
-    # Convert the JSON data from nx.node_link_data(G) to the correct format for visdcc
+    # Convert the JSON data from nx.node_link_data(G) to the correct format for visdcc, including colors
+    nodes_data = nx.node_link_data(G)['nodes']
+    links_data = nx.node_link_data(G)['links']
+
+    for node in nodes_data:
+        if node.get('inauthentic', False):
+            node['color'] = 'red'
+        else:
+            node['color'] = 'blue'
+
     network_data = {
-        'nodes': [{'id': node['id']} for node in nx.node_link_data(G)['nodes']],
-        'edges': [{'from': link['source'], 'to': link['target']} for link in nx.node_link_data(G)['links']]
+        'nodes': [{'id': node['id'], 'color': node.get('color', 'blue')} for node in nodes_data],
+        'edges': [{'from': link['source'], 'to': link['target']} for link in links_data]
     }
 
     app.layout = html.Div([
