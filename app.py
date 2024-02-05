@@ -16,10 +16,10 @@ def main():
     m: Set amount of authentic nodes to follow by each inauthentic node
     """
 
-    n = 50
+    n = 100
     beta = 0.5
     gamma = 0.05 
-    num_messages = 100
+    num_messages = 10
     theta = 0.5
 
     m = 4 #TODO: Integrate this values

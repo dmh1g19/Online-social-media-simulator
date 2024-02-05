@@ -8,8 +8,7 @@ import plotly.express as px
 
 class Plotter:
 
-    def __init__(self, node_size, G):
-        self.global_node_size = node_size
+    def __init__(self, G):
         self.G = G
 
         self.authentic_nodes = [n for n, d in self.G.nodes(data=True) if not d.get('inauthentic', False)]
