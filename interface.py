@@ -7,6 +7,10 @@ from plotting import *
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 
+"""
+    All the code in this module is purely for displaying the results of the simulation for easy viewing and debugging purposes,
+    no logic is kept here.
+"""
 
 def create_dash_app():
     return dash.Dash(__name__)
@@ -102,6 +106,10 @@ def make_layout(G, app):
                             id='tmp2',
                             figure=graphs.plot_degree_comparison_authentic_inauthentic()
                         ),
+                        dcc.Graph(
+                            id='tmp4',
+                            figure=graphs.plot_quality_engagement_scatter()
+                        ),
                     ],
                     style={'height': 'calc(100vh - 60px)', 'overflow-y': 'auto', 'width': '50%', 'display': 'inline-block', 'vertical-align': 'top'}
                 ),
@@ -126,20 +134,26 @@ def register_callbacks(app, G):
             inauthentic = G.nodes[node_id].get('inauthentic', False)
             
             if messages:  
-                total_appeal = sum(msg['appeal'] for msg in messages)
+                total_appeal = sum(msg['quality'] for msg in messages)
                 avg_appeal = total_appeal / len(messages)
-                messages_list = [html.Li(f"Appeal: {msg['appeal']:.2f}, Origin: {msg['origin']}") for msg in messages]
+
+                total_engagement = sum(msg['engagement'] for msg in messages)
+                avg_engagement = total_engagement / len(messages)
+
+                messages_list = [html.Li(f"Quality: {msg['quality']:.2f}, Engagement: {msg['engagement']:.2f}, Origin: {msg['origin']}") for msg in messages]
                 messages_display = html.Div([
                     html.Ul(messages_list)
                 ])
             else:
                 messages_display = "No messages for this node."
                 avg_appeal = 0  
+                avg_engagement = 0  
             
             node_info_display = html.Div([
                 html.P(f"Node {node_id} - {'Inauthentic' if inauthentic else 'Authentic'}"),
                 html.P(f"Total messages: {len(messages)}"),
-                html.P(f"Average Appeal: {avg_appeal:.2f}")
+                html.P(f"Average Quality: {avg_appeal:.2f}"),
+                html.P(f"Average Engagement: {avg_engagement:.2f}")
             ])
 
         return messages_display, node_info_display

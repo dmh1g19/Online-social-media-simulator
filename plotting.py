@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.express as px
 
+"""
+    This module is purely for generating graphs to view the results of the simulation.
+"""
 
 class Plotter:
 
@@ -84,5 +87,36 @@ class Plotter:
         fig.update_layout(title_text="Total Degrees Comparison",
                           xaxis_title="Category",
                           yaxis_title="Total Degrees")
+
+        return fig
+
+    def plot_quality_engagement_scatter(self):
+        quality_authentic = []
+        engagement_authentic = []
+        quality_inauthentic = []
+        engagement_inauthentic = []
+
+        for n, data in self.G.nodes(data=True):
+            messages = data.get('messages', [])
+            for message in messages:
+                if data.get('inauthentic', False):
+                    quality_inauthentic.append(message['quality'])
+                    engagement_inauthentic.append(message['engagement'])
+                else:
+                    quality_authentic.append(message['quality'])
+                    engagement_authentic.append(message['engagement'])
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=quality_authentic, y=engagement_authentic,
+                                 mode='markers', name='Authentic',
+                                 marker=dict(color='blue')))
+        fig.add_trace(go.Scatter(x=quality_inauthentic, y=engagement_inauthentic,
+                                 mode='markers', name='Inauthentic',
+                                 marker=dict(color='red')))
+
+        fig.update_layout(title='Quality vs. Engagement Scatter Plot For Entire Graph',
+                          xaxis_title='Quality',
+                          yaxis_title='Engagement',
+                          legend_title='Node Type')
 
         return fig

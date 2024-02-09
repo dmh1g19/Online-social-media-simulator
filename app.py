@@ -3,6 +3,9 @@ from plotting import *
 from messaging import *
 from interface import *
 
+"""
+    Entry point of the application.
+"""
 
 def main():
     """
@@ -19,7 +22,7 @@ def main():
     n = 100
     beta = 0.5
     gamma = 0.05 
-    num_messages = 10
+    finite_attention = 10  # number of messages each user sees
     theta = 0.5
 
     m = 4 #TODO: Integrate this values
@@ -28,8 +31,8 @@ def main():
     G = create_authentic_subnetwork(n)
     add_inauthentic_subnetwork(G, beta, m)
     simulate_infiltration(G, gamma)
-    generate_messages(G, num_messages, theta) 
-    #reshare_messages(G)
+    generate_messages(G, finite_attention, theta) 
+    reshare_messages(G)
 
     # Display content
     app = create_dash_app()

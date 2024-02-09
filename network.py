@@ -2,6 +2,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
+"""
+    Contains networking logic such as generation of a new network and infiltration of bad actors.
+"""
+
 def create_authentic_subnetwork(n=100, beta=0.05):
     """
     Create a subnetwork of authentic nodes.
