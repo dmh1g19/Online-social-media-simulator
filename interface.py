@@ -1,15 +1,17 @@
 import networkx as nx
 import dash
-from dash import dcc, html
 import visdcc
 import numpy as np
-from plotting import *
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
+from dash import callback_context
+from plotting import *
+from dash import dcc, html
 
 """
-    All the code in this module is purely for displaying the results of the simulation for easy viewing and debugging purposes,
-    no logic is kept here.
+All the code in this module is purely for displaying 
+the results of the simulation for easy viewing and debugging purposes,
+no logic is kept here.
 """
 
 def create_dash_app():
@@ -39,80 +41,29 @@ def make_layout(G, app):
     app.layout = html.Div([
         html.Div(
             id='node-selected', 
-            style={'position': 'absolute', 
-                   'top': '10px', 
-                   'left': '10px', 
-                   'background': 'white', 
-                   'padding': '10px', 
-                   'border-radius': '5px', 
-                   'border': '2px solid #ddd', 
-                   'z-index': '1000', 
-                   'max-height': '200px', 
-                   'overflow-y': 'auto', 
-                   'height': '100px',
-                   'width': '200px'}
-        ),
-        html.Div(
-            html.H2("Node timeline")
+            className='node-selection-box',
         ),
         html.Div(
             id='node-messages-display', 
-            style={'position': 'absolute', 
-                   'bottom': '10px', 
-                   'left': '10px', 
-                   'background': 'white', 
-                   'padding': '10px', 
-                   'border-radius': '5px', 
-                   'border': '2px solid #ddd', 
-                   'z-index': '1000', 
-                   'max-height': '200px', 
-                   'overflow-y': 'auto', 
-                   'height': '300px',
-                   'width': '200px'}
+            className='context-box',
         ),
         html.Div([
                 html.Div(
+                        id='network-button', 
+                        className='hover-effect',
+                        style={'right': '130px'},
+                        children=html.Div([html.Img(src='/assets/network.svg', style={'height': '45px', 'width': '45px'})])
+                    ),
+                html.Div(
                         id='messages-button', 
-                        style={
-                            'position': 'absolute',  
-                            'top': '10px', 
-                            'right': '70px',
-                            'background': 'white', 
-                            'padding-right': '0px', 
-                            'border-radius': '5px', 
-                            'border': '2px solid #ddd', 
-                            'z-index': '1000', 
-                            'max-height': '200px', 
-                            'overflow-y': 'auto', 
-                            'height': '50px',
-                            'width': '50px',
-                            'display': 'flex',  
-                            'align-items': 'center',  
-                            'justify-content': 'center',
-                            'overflow': 'hidden'
-                        },
-                        children=html.Div([html.Img(src='/assets/help.svg', style={'height': '50px', 'width': '50px'})])
+                        className='hover-effect',
+                        style={'right': '70px'},
+                        children=html.Div([html.Img(src='/assets/bubble.svg', style={'height': '50px', 'width': '50px'})])
                     ),
                 html.Div(
                         id='help-button', 
-                        style={
-                            'position': 'absolute',  
-                            'top': '10px', 
-                            'right': '10px',
-                            'background': 'white', 
-                            'padding': '0px', 
-                            'border-radius': '5px', 
-                            'border': '2px solid #ddd', 
-                            'z-index': '1000', 
-                            'max-height': '200px', 
-                            'overflow-y': 'auto', 
-                            'height': '50px',
-                            'width': '50px',
-                            'display': 'flex',  
-                            'align-items': 'center',  
-                            'justify-content': 'center',
-                            'overflow': 'hidden'
-                        },
+                        className='hover-effect',
+                        style={'right': '10px'},
                         children=html.Div([html.Img(src='/assets/help.svg', style={'height': '50px', 'width': '50px'})])
                     ),
                 html.Div(
@@ -135,19 +86,19 @@ def make_layout(G, app):
                 html.Div(
                     [
                         dcc.Graph(
-                            id='degree-distribution-graph',
+                            id='tmp',
                             figure=graphs.plot_degree_distribution_by_type()
                         ),
                         dcc.Graph(
-                            id='bar',
+                            id='tmp1',
                             figure=graphs.plot_authentic_inauthentic_bar_chart()
                         ),
                         dcc.Graph(
-                            id='tmp',
+                            id='tmp2',
                             figure=graphs.plot_degree_distribution()
                         ),
                         dcc.Graph(
-                            id='tmp2',
+                            id='tmp3',
                             figure=graphs.plot_degree_comparison_authentic_inauthentic()
                         ),
                         dcc.Graph(
@@ -155,6 +106,7 @@ def make_layout(G, app):
                             figure=graphs.plot_quality_engagement_scatter()
                         ),
                     ],
+                    id='graphs-container',
                     style={'height': 'calc(100vh - 60px)', 'overflow-y': 'auto', 'width': '50%', 'display': 'inline-block', 'vertical-align': 'top'}
                 ),
             ],
@@ -201,3 +153,58 @@ def register_callbacks(app, G):
             ])
 
         return messages_display, node_info_display
+
+    @app.callback(
+        Output('graphs-container', 'children'),
+        [Input('messages-button', 'n_clicks'),
+         Input('network-button', 'n_clicks'),
+         Input('help-button', 'n_clicks')],
+        prevent_initial_call=True
+    )
+    def update_graphs_container(n_clicks_messages, n_clicks_network, n_clicks_help):
+        triggered_id = callback_context.triggered[0]['prop_id'].split('.')[0]
+
+        graphs = Plotter(G)    
+
+        if triggered_id == 'messages-button':
+            new_graphs = [
+                dcc.Graph(
+                    id='q_engagement',
+                    figure=graphs.plot_quality_engagement_scatter()
+                ),
+            ]
+        elif triggered_id == 'network-button':
+            new_graphs = [
+                dcc.Graph(
+                    id='degree-distribution',
+                    figure=graphs.plot_degree_distribution_by_type()
+                ),
+                dcc.Graph(
+                    id='authentic_vs_inauthentic',
+                    figure=graphs.plot_authentic_inauthentic_bar_chart()
+                ),
+                dcc.Graph(
+                    id='degree_dist',
+                    figure=graphs.plot_degree_distribution()
+                ),
+                dcc.Graph(
+                    id='degree_comparison',
+                    figure=graphs.plot_degree_comparison_authentic_inauthentic()
+                ),
+            ]
+        elif triggered_id == 'help-button':
+            helpful_info = html.Div([
+                html.H3("Helpful Information"),
+                html.P("Here you can find some useful information about how to navigate the application and interpret the data:"),
+                html.Ul([
+                    html.Li("Item 1: Description"),
+                    html.Li("Item 2: Description"),
+                    html.Li("Item 3: Description"),
+                ]),
+            ])
+    
+            return [helpful_info]
+        else:
+            raise dash.exceptions.PreventUpdate
+
+        return new_graphs
