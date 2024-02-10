@@ -2,7 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-def generate_messages(G, num_messages=100, deception=0.5):
+def generate_messages(G, num_messages, deception):
     """
     Generate messages for each node, where for authentic nodes, the engagement is the same as quality.
     Inauthentic nodes use deception to increase their message's engagement, potentially without a corresponding increase in quality.

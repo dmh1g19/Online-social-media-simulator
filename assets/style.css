@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 .hover-effect {
     overflow: hidden;
     position: absolute;
@@ -34,9 +40,9 @@
     border: 2px solid #ddd;
     z-index: 1000;
     max-height: 200px;
-    overflow-y: auto;
-    height: 100px;
-    width: 200px;
+    overflow-y: hidden;
+    height: 170px;
+    width: 100px;
 }
 
 .context-box {

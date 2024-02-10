@@ -11,7 +11,7 @@ def main():
     gamma: Amount of influence of inauthentic nodes (how any inauthentic nodes are followed by authentic ones, aka 'infiltration')
     finite_attention: The size of the timeline for each node in the network
     theta: Deception parameter, defined as the probability that bad actor content is irresistible
-    m: Set amount of authentic nodes to follow by each inauthentic node
+    m: Set amount of authentic nodes to follow by each inauthentic node (currently static)
     """
 
     n = 10

@@ -7,6 +7,9 @@ from dash.dependencies import Input, Output
 from dash import callback_context
 from plotting import *
 from dash import dcc, html
+from interface_help import get_help_info
+from interface_network_graphs import get_network_graphs
+from interface_messages_graphs import get_messages_graphs
 
 """
 All the code in this module is purely for displaying 
@@ -84,28 +87,7 @@ def make_layout(G, app):
                     style={'width': '50%', 'display': 'inline-block', 'vertical-align': 'top'}
                 ),
                 html.Div(
-                    [
-                        dcc.Graph(
-                            id='tmp',
-                            figure=graphs.plot_degree_distribution_by_type()
-                        ),
-                        dcc.Graph(
-                            id='tmp1',
-                            figure=graphs.plot_authentic_inauthentic_bar_chart()
-                        ),
-                        dcc.Graph(
-                            id='tmp2',
-                            figure=graphs.plot_degree_distribution()
-                        ),
-                        dcc.Graph(
-                            id='tmp3',
-                            figure=graphs.plot_degree_comparison_authentic_inauthentic()
-                        ),
-                        dcc.Graph(
-                            id='tmp4',
-                            figure=graphs.plot_quality_engagement_scatter()
-                        ),
-                    ],
+                    get_network_graphs(G),
                     id='graphs-container',
                     style={'height': 'calc(100vh - 60px)', 'overflow-y': 'auto', 'width': '50%', 'display': 'inline-block', 'vertical-align': 'top'}
                 ),
@@ -164,46 +146,15 @@ def register_callbacks(app, G):
     def update_graphs_container(n_clicks_messages, n_clicks_network, n_clicks_help):
         triggered_id = callback_context.triggered[0]['prop_id'].split('.')[0]
 
-        graphs = Plotter(G)    
-
         if triggered_id == 'messages-button':
-            new_graphs = [
-                dcc.Graph(
-                    id='q_engagement',
-                    figure=graphs.plot_quality_engagement_scatter()
-                ),
-            ]
+            new_graphs = get_messages_graphs(G)
+
         elif triggered_id == 'network-button':
-            new_graphs = [
-                dcc.Graph(
-                    id='degree-distribution',
-                    figure=graphs.plot_degree_distribution_by_type()
-                ),
-                dcc.Graph(
-                    id='authentic_vs_inauthentic',
-                    figure=graphs.plot_authentic_inauthentic_bar_chart()
-                ),
-                dcc.Graph(
-                    id='degree_dist',
-                    figure=graphs.plot_degree_distribution()
-                ),
-                dcc.Graph(
-                    id='degree_comparison',
-                    figure=graphs.plot_degree_comparison_authentic_inauthentic()
-                ),
-            ]
+            new_graphs = get_network_graphs(G)
+
         elif triggered_id == 'help-button':
-            helpful_info = html.Div([
-                html.H3("Helpful Information"),
-                html.P("Here you can find some useful information about how to navigate the application and interpret the data:"),
-                html.Ul([
-                    html.Li("Item 1: Description"),
-                    html.Li("Item 2: Description"),
-                    html.Li("Item 3: Description"),
-                ]),
-            ])
-    
-            return [helpful_info]
+            return [get_help_info()]
+
         else:
             raise dash.exceptions.PreventUpdate
 
