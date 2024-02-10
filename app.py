@@ -19,7 +19,7 @@ def main():
     m: Set amount of authentic nodes to follow by each inauthentic node
     """
 
-    n = 100
+    n = 10
     beta = 0.5
     gamma = 0.05 
     finite_attention = 10  # number of messages each user sees

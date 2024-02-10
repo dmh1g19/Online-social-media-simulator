@@ -72,6 +72,50 @@ def make_layout(G, app):
         ),
         html.Div([
                 html.Div(
+                        id='messages-button', 
+                        style={
+                            'position': 'absolute',  
+                            'top': '10px', 
+                            'right': '70px',
+                            'background': 'white', 
+                            'padding-right': '0px', 
+                            'border-radius': '5px', 
+                            'border': '2px solid #ddd', 
+                            'z-index': '1000', 
+                            'max-height': '200px', 
+                            'overflow-y': 'auto', 
+                            'height': '50px',
+                            'width': '50px',
+                            'display': 'flex',  
+                            'align-items': 'center',  
+                            'justify-content': 'center',
+                            'overflow': 'hidden'
+                        },
+                        children=html.Div([html.Img(src='/assets/help.svg', style={'height': '50px', 'width': '50px'})])
+                    ),
+                html.Div(
+                        id='help-button', 
+                        style={
+                            'position': 'absolute',  
+                            'top': '10px', 
+                            'right': '10px',
+                            'background': 'white', 
+                            'padding': '0px', 
+                            'border-radius': '5px', 
+                            'border': '2px solid #ddd', 
+                            'z-index': '1000', 
+                            'max-height': '200px', 
+                            'overflow-y': 'auto', 
+                            'height': '50px',
+                            'width': '50px',
+                            'display': 'flex',  
+                            'align-items': 'center',  
+                            'justify-content': 'center',
+                            'overflow': 'hidden'
+                        },
+                        children=html.Div([html.Img(src='/assets/help.svg', style={'height': '50px', 'width': '50px'})])
+                    ),
+                html.Div(
                     visdcc.Network(
                         id='network-graph',
                         data=network_data,
