@@ -1,5 +1,6 @@
 from dash import html
 
+
 def get_help_info():
     helpful_info = html.Div([
         html.H3("Helpful Information"),

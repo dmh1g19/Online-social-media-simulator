@@ -11,14 +11,16 @@ def main():
     gamma: Amount of influence of inauthentic nodes (how any inauthentic nodes are followed by authentic ones, aka 'infiltration')
     finite_attention: The size of the timeline for each node in the network
     theta: Deception parameter, defined as the probability that bad actor content is irresistible
+    mu: The probability that a node will either generate a new message or reshare and existing one on their timeline
     m: Set amount of authentic nodes to follow by each inauthentic node (currently static)
     """
 
-    n = 10
+    n = 100
     beta = 0.5
-    gamma = 0.05 
+    gamma = 0.15 
     finite_attention = 6  # number of messages each user sees
     theta = 0.5
+    mu = 0.2
     m = 4 #TODO: Integrate this value
 
     G = create_authentic_subnetwork(n)

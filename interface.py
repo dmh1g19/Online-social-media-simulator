@@ -11,6 +11,7 @@ from interface_help import get_help_info
 from interface_network_graphs import get_network_graphs
 from interface_messages_graphs import get_messages_graphs
 
+
 """
 All the code in this module is purely for displaying 
 the results of the simulation for easy viewing and debugging purposes,
