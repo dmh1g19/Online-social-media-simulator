@@ -119,7 +119,7 @@ def register_callbacks(app, G):
                 total_engagement = sum(msg['engagement'] for msg in messages)
                 avg_engagement = total_engagement / len(messages)
 
-                messages_list = [html.Li(f"Quality: {msg['quality']:.2f}, Engagement: {msg['engagement']:.2f}, Origin: {msg['origin']}") for msg in messages]
+                messages_list = [html.Li(f"Time step: {msg['time_step']}\n,Quality: {msg['quality']:.2f}\n,Engagement: {msg['engagement']:.2f}\n,Origin: {msg['origin']}\n") for msg in messages]
                 messages_display = html.Div([
                     html.Ul(messages_list)
                 ])

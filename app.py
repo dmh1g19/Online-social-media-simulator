@@ -15,19 +15,21 @@ def main():
     m: Set amount of authentic nodes to follow by each inauthentic node (currently static)
     """
 
-    n = 100
+    n = 50
     beta = 0.5
     gamma = 0.15 
-    finite_attention = 6  # number of messages each user sees
+    finite_attention = 6 
     theta = 0.5
     mu = 0.2
+    steps = 10
+    msgs_per_step = 1
     m = 4 #TODO: Integrate this value
 
     G = create_authentic_subnetwork(n)
     add_inauthentic_subnetwork(G, beta, m)
     simulate_infiltration(G, gamma)
-    generate_messages(G, finite_attention, theta) 
-    reshare_messages(G, finite_attention)
+
+    simulate_time_steps(G, steps, msgs_per_step, theta, finite_attention, mu)
 
     app = create_dash_app()
     make_layout(G, app)

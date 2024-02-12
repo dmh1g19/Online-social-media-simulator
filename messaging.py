@@ -2,7 +2,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-def generate_messages(G, num_messages, deception):
+
+CURRENT_TIME_STEP = 0 
+
+def generate_messages(G, num_messages, deception, time_step, finite_attention):
     """
     Generate messages for each node, where for authentic nodes, the engagement is the same as quality.
     Inauthentic nodes use deception to increase their message's engagement, potentially without a corresponding increase in quality.
@@ -14,7 +17,8 @@ def generate_messages(G, num_messages, deception):
 
     for n, data in G.nodes(data=True):
         inauthentic = data.get('inauthentic', False)
-        messages = []
+        messages = data.get('messages', [])
+
         for _ in range(num_messages):
             # Generate base quality value for each message, which also serves as the base engagement for authentic messages
 
@@ -27,7 +31,15 @@ def generate_messages(G, num_messages, deception):
                 base_quality = np.random.rand()
                 engagement = quality = base_quality
 
-            messages.append({'engagement': engagement, 'quality': quality, 'origin': 'inauthentic' if inauthentic else 'authentic'})
+            if len(messages) >= finite_attention:
+                messages.pop(0)
+
+            messages.append({
+                'engagement': engagement,
+                'quality': quality,
+                'origin': 'inauthentic' if inauthentic else 'authentic',
+                'time_step': time_step 
+            })
 
         G.nodes[n]['messages'] = messages
 
@@ -57,7 +69,7 @@ def reshare_to_followers(G, node, message, finite_attention):
         
         if message not in G.nodes[follower]['messages']:
             if len(G.nodes[follower]['messages']) >= finite_attention:
-                G.nodes[follower]['messages'].pop(0)  # FIFO
+                G.nodes[follower]['messages'].pop(0)  # FIFO to simulate message decay/aging
             
             G.nodes[follower]['messages'].append(message)
 
@@ -78,3 +90,21 @@ def reshare_messages(G, finite_attention):
                     reshare_to_followers(G, n, msg, finite_attention)
 
     return G
+
+def simulate_time_steps(G, num_steps, num_messages, deception, finite_attention, node_selected):
+    """
+    Simulate the network's dynamics over a given number of time steps.
+    """
+
+    global CURRENT_TIME_STEP
+
+    for step in range(num_steps):
+        CURRENT_TIME_STEP = step
+        
+        # Simulate actions (message generation or resharing) at this time step
+        for n in G.nodes():
+            action_type = np.random.choice(['generate', 'reshare'], p=[node_selected, 1-node_selected]) 
+            if action_type == 'generate':
+                generate_messages(G, num_messages, deception, step, finite_attention)
+            else:
+                reshare_messages(G, finite_attention)
