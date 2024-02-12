@@ -195,4 +195,33 @@ class Plotter:
         )
 
         return fig
- 
+
+    def plot_avg_quality_and_engagement_over_time(self):
+        time_step_quality = collections.defaultdict(list)
+        time_step_engagement = collections.defaultdict(list)
+
+        for _, data in self.G.nodes(data=True):
+            for msg in data.get('messages', []):
+                time_step_quality[msg['time_step']].append(msg['quality'])
+                time_step_engagement[msg['time_step']].append(msg['engagement'])
+
+        avg_quality_by_time_step = {step: np.mean(qualities) for step, qualities in time_step_quality.items()}
+        avg_engagement_by_time_step = {step: np.mean(engagements) for step, engagements in time_step_engagement.items()}
+
+        time_steps = sorted(set(avg_quality_by_time_step.keys()) | set(avg_engagement_by_time_step.keys()))
+        avg_qualities = [avg_quality_by_time_step.get(step, None) for step in time_steps]
+        avg_engagements = [avg_engagement_by_time_step.get(step, None) for step in time_steps]
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=time_steps, y=avg_qualities, mode='lines+markers',
+                                 name='Avg Quality', line=dict(color='royalblue', width=2),
+                                 marker=dict(color='lightseagreen', size=8)))
+        fig.add_trace(go.Scatter(x=time_steps, y=avg_engagements, mode='lines+markers',
+                                 name='Avg Engagement', line=dict(color='firebrick', width=2),
+                                 marker=dict(color='gold', size=8)))
+        fig.update_layout(title='Average Quality and Engagement of Messages Over Time',
+                          xaxis_title='Time Step',
+                          yaxis_title='Average Value',
+                          template='plotly_white')
+
+        return fig

@@ -18,6 +18,10 @@ def get_messages_graphs(G):
             id='influence_score',
             figure=graphs.plot_node_influence_map()
         ),
+        dcc.Graph(
+            id='msg_temporal',
+            figure=graphs.plot_avg_quality_and_engagement_over_time()
+        ),
     ]
 
     return new_graphs

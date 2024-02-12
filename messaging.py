@@ -101,7 +101,6 @@ def simulate_time_steps(G, num_steps, num_messages, deception, finite_attention,
     for step in range(num_steps):
         CURRENT_TIME_STEP = step
         
-        # Simulate actions (message generation or resharing) at this time step
         for n in G.nodes():
             action_type = np.random.choice(['generate', 'reshare'], p=[node_selected, 1-node_selected]) 
             if action_type == 'generate':
