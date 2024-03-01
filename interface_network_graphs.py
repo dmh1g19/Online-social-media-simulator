@@ -24,3 +24,4 @@ def get_network_graphs(G):
     ]
 
     return new_graphs
+

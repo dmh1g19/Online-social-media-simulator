@@ -225,3 +225,34 @@ class Plotter:
                           template='plotly_white')
 
         return fig
+
+    def plot_message_production_over_time(self):
+        time_step_message_count = {'authentic': collections.defaultdict(int),
+                                   'inauthentic': collections.defaultdict(int)}
+    
+        for n, data in self.G.nodes(data=True):
+            node_type = 'inauthentic' if data.get('inauthentic', False) else 'authentic'
+            for message in data.get('messages', []):
+                time_step_message_count[node_type][message['time_step']] += 1
+    
+        time_steps = sorted(set(time_step_message_count['authentic']) | set(time_step_message_count['inauthentic']))
+        authentic_counts = [time_step_message_count['authentic'].get(step, 0) for step in time_steps]
+        inauthentic_counts = [time_step_message_count['inauthentic'].get(step, 0) for step in time_steps]
+    
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=time_steps, y=authentic_counts, mode='lines+markers',
+                                 name='Authentic', line=dict(color='blue', width=2),
+                                 marker=dict(color='blue', size=8)))
+
+        fig.add_trace(go.Scatter(x=time_steps, y=inauthentic_counts, mode='lines+markers',
+                                 name='Inauthentic', line=dict(color='red', width=2),
+                                 marker=dict(color='red', size=8)))
+
+        fig.update_layout(title='Message Production Over Time',
+                          xaxis_title='Time Step',
+                          yaxis_title='Number of Messages Produced',
+                          legend_title='Node Type',
+                          template='plotly_white')
+    
+        return fig
+    

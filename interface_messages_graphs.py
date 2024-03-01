@@ -22,6 +22,11 @@ def get_messages_graphs(G):
             id='msg_temporal',
             figure=graphs.plot_avg_quality_and_engagement_over_time()
         ),
+        dcc.Graph(
+            id='msg_amount',
+            figure=graphs.plot_message_production_over_time()
+        ),
     ]
 
     return new_graphs
+

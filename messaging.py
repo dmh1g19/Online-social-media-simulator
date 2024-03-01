@@ -5,7 +5,7 @@ import numpy as np
 
 CURRENT_TIME_STEP = 0 
 
-def generate_messages(G, num_messages, deception, time_step, finite_attention):
+def generate_messages(G, num_messages, deception, time_step, finite_attention, flooding_factor):
     """
     Generate messages for each node, where for authentic nodes, the engagement is the same as quality.
     Inauthentic nodes use deception to increase their message's engagement, potentially without a corresponding increase in quality.
@@ -13,13 +13,17 @@ def generate_messages(G, num_messages, deception, time_step, finite_attention):
     G: Network graph
     num_messages: Number of messages to generate for each node
     deception: Adjustment to engagement for messages from inauthentic nodes
+    flooding_factor: Factor by which inauthentic nodes increase their message output to simulate flooding
     """
 
     for n, data in G.nodes(data=True):
         inauthentic = data.get('inauthentic', False)
         messages = data.get('messages', [])
 
-        for _ in range(num_messages):
+        # Adjust the number of messages for inauthentic nodes to simulate flooding
+        total_messages = num_messages * (flooding_factor if inauthentic else 1)
+
+        for _ in range(total_messages):
             # Generate base quality value for each message, which also serves as the base engagement for authentic messages
 
             if inauthentic:
@@ -69,7 +73,7 @@ def reshare_to_followers(G, node, message, finite_attention):
         
         if message not in G.nodes[follower]['messages']:
             if len(G.nodes[follower]['messages']) >= finite_attention:
-                G.nodes[follower]['messages'].pop(0)  # FIFO to simulate message decay/aging
+                G.nodes[follower]['messages'].pop(0)  # FIFO to simulate message decay/aging on the timeline
             
             G.nodes[follower]['messages'].append(message)
 
@@ -91,7 +95,7 @@ def reshare_messages(G, finite_attention):
 
     return G
 
-def simulate_time_steps(G, num_steps, num_messages, deception, finite_attention, node_selected):
+def simulate_time_steps(G, num_steps, num_messages, deception, finite_attention, node_selected, flooding_factor):
     """
     Simulate the network's dynamics over a given number of time steps.
     """
@@ -104,6 +108,7 @@ def simulate_time_steps(G, num_steps, num_messages, deception, finite_attention,
         for n in G.nodes():
             action_type = np.random.choice(['generate', 'reshare'], p=[node_selected, 1-node_selected]) 
             if action_type == 'generate':
-                generate_messages(G, num_messages, deception, step, finite_attention)
+                generate_messages(G, num_messages, deception, step, finite_attention, flooding_factor)
             else:
                 reshare_messages(G, finite_attention)
+

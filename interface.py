@@ -160,3 +160,4 @@ def register_callbacks(app, G):
             raise dash.exceptions.PreventUpdate
 
         return new_graphs
+

@@ -21,7 +21,7 @@ def get_help_info():
         html.H3("Message timelines"),
         html.P("Each user has an individual timeline of messages with a maximum capacity, old messages are replaced by newer ones, simulating reslistic dynamic exposure to content."),
         
-        html.H3("Message resharing"),
+        html.H3("Message resharing (POLLING)"),
         html.P("Messages are shared based on their relative engagement to the total engagement of all messages in an agent's feed."),
         html.P("This approach reflects a more nuanced understanding of how engagement influences information spread, where messages compete for attention based on their appeal."),
         html.P("The assumption that content produced by bots is of strictly low quality, focusing on the distinction between the intrinsic value (quality) of information and its perceived appeal or engagement. The engagement of these messages can be manipulated through deception to be higher, but the quality remains low, emphasizing the bots' role in spreading low-quality, potentially misleading information within the network."),

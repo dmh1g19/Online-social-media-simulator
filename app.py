@@ -15,20 +15,21 @@ def main():
     m: Set amount of authentic nodes to follow by each inauthentic node (currently static)
     """
 
-    n = 10
+    n = 60
     beta = 0.5
     gamma = 0.15 
-    finite_attention = 30
+    finite_attention = 100
     theta = 0.5
     mu = 0.35
     steps = 25
     msgs_per_step = 1
+    flooding_factor = 1
     m = 4 #TODO: Integrate this value
 
     G = create_authentic_subnetwork(n)
     add_inauthentic_subnetwork(G, beta, m)
     simulate_infiltration(G, gamma)
-    simulate_time_steps(G, steps, msgs_per_step, theta, finite_attention, mu)
+    simulate_time_steps(G, steps, msgs_per_step, theta, finite_attention, mu, flooding_factor)
 
     app = create_dash_app()
     make_layout(G, app)
@@ -38,3 +39,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
