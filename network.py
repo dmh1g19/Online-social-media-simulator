@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def create_authentic_subnetwork(n=100, beta=0.05):
+def create_authentic_subnetwork(n, beta):
     """
     Create a subnetwork of authentic nodes.
     n: Number of authentic nodes
@@ -13,6 +13,7 @@ def create_authentic_subnetwork(n=100, beta=0.05):
     G_authentic = nx.scale_free_graph(n)
     G_authentic = G_authentic.to_directed()
     G_authentic.remove_edges_from(nx.selfloop_edges(G_authentic))
+
     return G_authentic
 
 def add_inauthentic_subnetwork(G, beta, m):
@@ -57,3 +58,4 @@ def simulate_infiltration(G, gamma):
                 G.add_edge(authentic_node, inauthentic_node)
 
     return G
+

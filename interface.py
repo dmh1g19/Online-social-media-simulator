@@ -3,6 +3,7 @@ import dash
 import visdcc
 import numpy as np
 import plotly.graph_objects as go
+
 from dash.dependencies import Input, Output
 from dash import callback_context
 from plotting import *
@@ -10,6 +11,7 @@ from dash import dcc, html
 from interface_help import get_help_info
 from interface_network_graphs import get_network_graphs
 from interface_messages_graphs import get_messages_graphs
+from interface_topic_graphs import get_topic_graphs
 
 
 """
@@ -55,11 +57,17 @@ def make_layout(G, app):
                 html.Div(
                         id='network-button', 
                         className='hover-effect',
-                        style={'right': '130px'},
+                        style={'right': '190px'},
                         children=html.Div([html.Img(src='/assets/network.svg', style={'height': '45px', 'width': '45px'})])
                     ),
                 html.Div(
                         id='messages-button', 
+                        className='hover-effect',
+                        style={'right': '130px'},
+                        children=html.Div([html.Img(src='/assets/bubble.svg', style={'height': '50px', 'width': '50px'})])
+                    ),
+                html.Div(
+                        id='messages-button-2', 
                         className='hover-effect',
                         style={'right': '70px'},
                         children=html.Div([html.Img(src='/assets/bubble.svg', style={'height': '50px', 'width': '50px'})])
@@ -141,10 +149,11 @@ def register_callbacks(app, G):
         Output('graphs-container', 'children'),
         [Input('messages-button', 'n_clicks'),
          Input('network-button', 'n_clicks'),
-         Input('help-button', 'n_clicks')],
+         Input('help-button', 'n_clicks'),
+         Input('messages-button-2', 'n_clicks')],
         prevent_initial_call=True
     )
-    def update_graphs_container(n_clicks_messages, n_clicks_network, n_clicks_help):
+    def update_graphs_container(n_clicks_messages, n_clicks_messages_2, n_clicks_network, n_clicks_help):
         triggered_id = callback_context.triggered[0]['prop_id'].split('.')[0]
 
         if triggered_id == 'messages-button':
@@ -152,6 +161,9 @@ def register_callbacks(app, G):
 
         elif triggered_id == 'network-button':
             new_graphs = get_network_graphs(G)
+
+        elif triggered_id == 'messages-button-2':
+            new_graphs = get_topic_graphs(G)
 
         elif triggered_id == 'help-button':
             return [get_help_info()]

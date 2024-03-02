@@ -2,6 +2,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
+from topic_distribution import *
+
 
 CURRENT_TIME_STEP = 0 
 
@@ -42,7 +44,8 @@ def generate_messages(G, num_messages, deception, time_step, finite_attention, f
                 'engagement': engagement,
                 'quality': quality,
                 'origin': 'inauthentic' if inauthentic else 'authentic',
-                'time_step': time_step 
+                'time_step': time_step,
+                'origin_node': n
             })
 
         G.nodes[n]['messages'] = messages
@@ -95,20 +98,24 @@ def reshare_messages(G, finite_attention):
 
     return G
 
-def simulate_time_steps(G, num_steps, num_messages, deception, finite_attention, node_selected, flooding_factor):
+def simulate_time_steps(G, num_steps, num_messages, deception, finite_attention, node_selected, flooding_factor, use_topic_based_resharing=False):
     """
     Simulate the network's dynamics over a given number of time steps.
+
+    Added parameter 'use_topic_based_resharing' to toggle the resharing method.
     """
 
     global CURRENT_TIME_STEP
 
     for step in range(num_steps):
         CURRENT_TIME_STEP = step
-        
+
         for n in G.nodes():
-            action_type = np.random.choice(['generate', 'reshare'], p=[node_selected, 1-node_selected]) 
+            action_type = np.random.choice(['generate', 'reshare'], p=[node_selected, 1-node_selected])
             if action_type == 'generate':
                 generate_messages(G, num_messages, deception, step, finite_attention, flooding_factor)
+            elif use_topic_based_resharing:
+                reshare_based_on_topic_similarity(G, finite_attention)
             else:
                 reshare_messages(G, finite_attention)
 

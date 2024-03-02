@@ -30,10 +30,9 @@ class Plotter:
 
         fig = go.Figure()
 
-        fig.add_trace(go.Scatter(x=deg_authentic, y=cnt_authentic, mode='markers', name='Authentic',
-                                 marker=dict(color='blue', size=5),))
-        fig.add_trace(go.Scatter(x=deg_inauthentic, y=cnt_inauthentic, mode='markers', name='Inauthentic',
-                                 marker=dict(color='red', size=5),))
+        fig.add_trace(go.Scatter(x=deg_authentic, y=cnt_authentic, mode='markers', name='Authentic', marker=dict(color='blue', size=5),))
+        fig.add_trace(go.Scatter(x=deg_inauthentic, y=cnt_inauthentic, mode='markers', name='Inauthentic', marker=dict(color='red', size=5),))
+
         fig.update_layout(title="Degree Distribution for Authentic and Inauthentic Nodes",
                           xaxis_title="Degree",
                           yaxis_title="Frequency",
@@ -50,10 +49,7 @@ class Plotter:
         fig = go.Figure()
 
         fig.add_trace(go.Bar(x=categories, y=values, marker_color=['blue', 'red']))
-        fig.update_layout(title_text='Count of Authentic and Inauthentic Nodes',
-                          xaxis_title="Category",
-                          yaxis_title="Number of Nodes",
-                          )
+        fig.update_layout(title_text='Count of Authentic and Inauthentic Nodes', xaxis_title="Category", yaxis_title="Number of Nodes",)
 
         return fig
 
@@ -64,9 +60,7 @@ class Plotter:
 
         fig = go.Figure()
 
-        fig.add_trace(go.Scatter(x=unique_degrees, y=count_degrees,
-                                 mode='markers+lines', 
-                                 marker=dict(color='blue', size=8, line=dict(color='red', width=2))))
+        fig.add_trace(go.Scatter(x=unique_degrees, y=count_degrees, mode='markers+lines', marker=dict(color='blue', size=8, line=dict(color='red', width=2))))
 
         fig.update_xaxes(type="log", title_text="Degree")
         fig.update_yaxes(type="log", title_text="Frequency")
@@ -83,9 +77,7 @@ class Plotter:
 
         fig = go.Figure()
         fig.add_trace(go.Bar(x=categories, y=totals, marker_color=['blue', 'red']))
-        fig.update_layout(title_text="Total Degrees Comparison",
-                          xaxis_title="Category",
-                          yaxis_title="Total Degrees")
+        fig.update_layout(title_text="Total Degrees Comparison", xaxis_title="Category", yaxis_title="Total Degrees")
 
         return fig
 
@@ -106,12 +98,8 @@ class Plotter:
                     engagement_authentic.append(message['engagement'])
 
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=quality_authentic, y=engagement_authentic,
-                                 mode='markers', name='Authentic',
-                                 marker=dict(color='blue')))
-        fig.add_trace(go.Scatter(x=quality_inauthentic, y=engagement_inauthentic,
-                                 mode='markers', name='Inauthentic',
-                                 marker=dict(color='red')))
+        fig.add_trace(go.Scatter(x=quality_authentic, y=engagement_authentic, mode='markers', name='Authentic', marker=dict(color='blue')))
+        fig.add_trace(go.Scatter(x=quality_inauthentic, y=engagement_inauthentic, mode='markers', name='Inauthentic', marker=dict(color='red')))
 
         fig.update_layout(title='Quality vs. Engagement Scatter Plot For Entire Graph',
                           xaxis_title='Quality',
@@ -146,13 +134,9 @@ class Plotter:
 
         fig = go.Figure()
 
-        fig.add_trace(go.Scatter(x=degrees_authentic, y=avg_counts_authentic,
-                                 mode='markers', name='Authentic Messages',
-                                 marker=dict(color='blue'), text='Authentic'))
+        fig.add_trace(go.Scatter(x=degrees_authentic, y=avg_counts_authentic, mode='markers', name='Authentic Messages', marker=dict(color='blue'), text='Authentic'))
 
-        fig.add_trace(go.Scatter(x=degrees_inauthentic, y=avg_counts_inauthentic,
-                                 mode='markers', name='Inauthentic Messages',
-                                 marker=dict(color='red'), text='Inauthentic'))
+        fig.add_trace(go.Scatter(x=degrees_inauthentic, y=avg_counts_inauthentic, mode='markers', name='Inauthentic Messages', marker=dict(color='red'), text='Inauthentic'))
 
         fig.update_layout(title="Degree Distribution with Message Count Overlay",
                           xaxis_title="Degree",
@@ -213,22 +197,15 @@ class Plotter:
         avg_engagements = [avg_engagement_by_time_step.get(step, None) for step in time_steps]
 
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=time_steps, y=avg_qualities, mode='lines+markers',
-                                 name='Avg Quality', line=dict(color='royalblue', width=2),
-                                 marker=dict(color='lightseagreen', size=8)))
-        fig.add_trace(go.Scatter(x=time_steps, y=avg_engagements, mode='lines+markers',
-                                 name='Avg Engagement', line=dict(color='firebrick', width=2),
-                                 marker=dict(color='gold', size=8)))
-        fig.update_layout(title='Average Quality and Engagement of Messages Over Time',
-                          xaxis_title='Time Step',
-                          yaxis_title='Average Value',
-                          template='plotly_white')
+        fig.add_trace(go.Scatter(x=time_steps, y=avg_qualities, mode='lines+markers', name='Avg Quality', line=dict(color='royalblue', width=2), marker=dict(color='lightseagreen', size=8)))
+        fig.add_trace(go.Scatter(x=time_steps, y=avg_engagements, mode='lines+markers', name='Avg Engagement', line=dict(color='firebrick', width=2), marker=dict(color='gold', size=8)))
+
+        fig.update_layout(title='Average Quality and Engagement of Messages Over Time', xaxis_title='Time Step', yaxis_title='Average Value', template='plotly_white')
 
         return fig
 
     def plot_message_production_over_time(self):
-        time_step_message_count = {'authentic': collections.defaultdict(int),
-                                   'inauthentic': collections.defaultdict(int)}
+        time_step_message_count = {'authentic': collections.defaultdict(int), 'inauthentic': collections.defaultdict(int)}
     
         for n, data in self.G.nodes(data=True):
             node_type = 'inauthentic' if data.get('inauthentic', False) else 'authentic'
@@ -240,13 +217,8 @@ class Plotter:
         inauthentic_counts = [time_step_message_count['inauthentic'].get(step, 0) for step in time_steps]
     
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=time_steps, y=authentic_counts, mode='lines+markers',
-                                 name='Authentic', line=dict(color='blue', width=2),
-                                 marker=dict(color='blue', size=8)))
-
-        fig.add_trace(go.Scatter(x=time_steps, y=inauthentic_counts, mode='lines+markers',
-                                 name='Inauthentic', line=dict(color='red', width=2),
-                                 marker=dict(color='red', size=8)))
+        fig.add_trace(go.Scatter(x=time_steps, y=authentic_counts, mode='lines+markers', name='Authentic', line=dict(color='blue', width=2), marker=dict(color='blue', size=8)))
+        fig.add_trace(go.Scatter(x=time_steps, y=inauthentic_counts, mode='lines+markers', name='Inauthentic', line=dict(color='red', width=2), marker=dict(color='red', size=8)))
 
         fig.update_layout(title='Message Production Over Time',
                           xaxis_title='Time Step',
@@ -254,5 +226,18 @@ class Plotter:
                           legend_title='Node Type',
                           template='plotly_white')
     
+        return fig
+
+    def plot_topic_distribution_across_network(self):
+        topic_counts = collections.Counter(data['topic'] for _, data in self.G.nodes(data=True) if 'topic' in data)
+
+        topics = list(topic_counts.keys())
+        counts = list(topic_counts.values())
+
+        fig = go.Figure([go.Bar(x=topics, y=counts, marker_color='indianred')])
+        fig.update_layout(title_text='Topic Distribution Across the Network',
+                          xaxis_title="Topics",
+                          yaxis_title="Count of Nodes",
+                          template="plotly_white")
         return fig
     
