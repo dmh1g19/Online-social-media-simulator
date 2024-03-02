@@ -13,10 +13,14 @@ def get_help_info():
         html.P("Amount of influence of inauthentic nodes (how any inauthentic nodes are followed by authentic ones, aka 'infiltration"),
         html.Li("Beta:"),
         html.P("Number of inauthentic nodes in relation to authentic"),
-        html.Li("Quality:"),
-        html.P("Refers to a massages quality, such that authentic users have set to have a high quality and inauthentic users have a very low quality."),
         html.P("Authentic users have quality qual to its engagement."),
         html.P("Inauthentic users have higher engagement content."),
+
+        html.H3("Engagement:"),
+        html.P("This parameter refers to a message's ability to attract attention from a node in order to incrase the chances of resharing."),
+        
+        html.Li("Quality:"),
+        html.P("Refers to a massages quality, such that authentic users have set to have a high quality and inauthentic users have a very low quality."),
 
         html.H3("Message timelines"),
         html.P("Each user has an individual timeline of messages with a maximum capacity, old messages are replaced by newer ones, simulating reslistic dynamic exposure to content."),

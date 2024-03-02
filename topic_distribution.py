@@ -1,8 +1,9 @@
 import numpy as np
 import networkx as nx
 
+
 TOPICS = ["left_wing", "right_wing", "cars", "charity", "planes", "travel", "tech"]
-TOPIC_WEIGHTS = [0.10, 0.20, 0.1, 0.05, 0.05, 0.2, 0.3] 
+TOPIC_WEIGHTS = [0.4, 0.3, 0.05, 0.05, 0.1, 0.05, 0.05] 
 
 def assign_topic_distributions(G):
     """
@@ -22,20 +23,30 @@ def topic_similarity(distribution1, distribution2, epsilon=1e-10):
 
     return np.dot(distribution1, distribution2) / denom
 
-# TODO: integrate similarity_threshold metric for better adjustability
-def reshare_based_on_topic_similarity(G, finite_attention, similarity_threshold=0.5):
+def reshare_to_followers(G, node, message, finite_attention):
     """
-    Reshare messages considering topic similarity between nodes, with an adjustable similarity threshold.
+    Reshare a message to all followers of the given node, ensuring no duplicates and adhering to the maximum timeline length.
+    """
+
+    for follower in G.successors(node):
+        if 'messages' not in G.nodes[follower]:
+            G.nodes[follower]['messages'] = []
+        
+        if message not in G.nodes[follower]['messages']:
+            if len(G.nodes[follower]['messages']) >= finite_attention:
+                G.nodes[follower]['messages'].pop(0)  # FIFO to simulate message decay/aging on the timeline
+            
+            G.nodes[follower]['messages'].append(message)
+
+def reshare_based_on_topic_similarity(G, finite_attention):
+    """
+    Reshare messages considering the topic of the message and the node's interest.
     """
 
     for n, data in G.nodes(data=True):
-        node_topic_distribution = data.get('topic_distribution', np.zeros(len(TOPICS)))
+        node_topic = data.get('topic')
         if 'messages' in data:
             for msg in data['messages']:
-                original_node = msg['origin_node']
-                original_node_topic_distribution = G.nodes[original_node].get('topic_distribution', np.zeros(len(TOPICS)))
-                similarity = topic_similarity(node_topic_distribution, original_node_topic_distribution)
-                
-                if similarity > similarity_threshold:
+                if msg['topic'] == node_topic:
                     reshare_to_followers(G, n, msg, finite_attention)
 

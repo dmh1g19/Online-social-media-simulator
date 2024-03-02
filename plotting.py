@@ -240,4 +240,59 @@ class Plotter:
                           yaxis_title="Count of Nodes",
                           template="plotly_white")
         return fig
+
+    def plot_node_engagement_by_topic(self):
+        # Dynamically extract topics from message data
+        topics_set = set()
+        for _, data in self.G.nodes(data=True):
+            for msg in data.get('messages', []):
+                if 'topic' in msg:
+                    topics_set.add(msg['topic'])
+        
+        topics = list(topics_set)
+    
+        # Initialize a dictionary to hold total engagement and message count for each topic
+        topic_engagement = {topic: {'total_engagement': 0, 'message_count': 0} for topic in topics}
+    
+        # Aggregate engagement data for each topic
+        for _, data in self.G.nodes(data=True):
+            for msg in data.get('messages', []):
+                if msg['topic'] in topic_engagement:
+                    topic_engagement[msg['topic']]['total_engagement'] += msg['engagement']
+                    topic_engagement[msg['topic']]['message_count'] += 1
+    
+        # Calculate average engagement for each topic
+        avg_engagement_by_topic = {topic: engagement['total_engagement'] / engagement['message_count'] if engagement['message_count'] > 0 else 0 
+                                   for topic, engagement in topic_engagement.items()}
+    
+        # Prepare data for plotting
+        topics = list(avg_engagement_by_topic.keys())
+        avg_engagements = list(avg_engagement_by_topic.values())
+    
+        fig = go.Figure([go.Bar(x=topics, y=avg_engagements, marker_color='indianred')])
+        fig.update_layout(title_text='Average Engagement by Topic Across the Network',
+                          xaxis_title="Topic",
+                          yaxis_title="Average Engagement",
+                          template="plotly_white")
+        return fig
+
+    def plot_topic_distribution_in_messages(self):
+        # Count the occurrences of each topic in messages
+        topic_counts = collections.defaultdict(int)
+        for _, data in self.G.nodes(data=True):
+            for msg in data.get('messages', []):
+                topic_counts[msg['topic']] += 1
+    
+        # Prepare data for plotting
+        topics = list(topic_counts.keys())
+        counts = list(topic_counts.values())
+    
+        fig = go.Figure([go.Bar(x=topics, y=counts, marker_color='indianred')])
+        fig.update_layout(
+            title_text='Distribution of Topics Across All Messages',
+            xaxis_title="Topics",
+            yaxis_title="Message Count",
+            template="plotly_white"
+        )
+        return fig
     

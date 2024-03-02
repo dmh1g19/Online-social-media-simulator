@@ -8,6 +8,14 @@ def get_topic_graphs(G):
         dcc.Graph(
             id='topic_distribution',
             figure=graphs.plot_topic_distribution_across_network()
+        ),
+        dcc.Graph(
+            id='engagement_by_topic',
+            figure=graphs.plot_node_engagement_by_topic()
+        ),
+        dcc.Graph(
+            id='topic_msg_distribution',
+            figure=graphs.plot_topic_distribution_in_messages()
         )
     ]
 

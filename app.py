@@ -19,17 +19,17 @@ def main():
     steps: The amount of time instances measured in steps from 1 to n
     """
 
-    n = 20
+    n = 50
     beta = 0.5
     gamma = 0.15 
-    finite_attention = 40
+    finite_attention = 100
     theta = 0.5
     mu = 0.35
     steps = 25
     msgs_per_step = 1
     flooding_factor = 1
     m = 4 #TODO: Integrate this parameter 
-    topic_similarity = True
+    topic_similarity = False 
 
     G = create_authentic_subnetwork(n, beta)
     add_inauthentic_subnetwork(G, beta, m)
