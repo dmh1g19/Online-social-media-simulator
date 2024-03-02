@@ -10,12 +10,12 @@ def get_topic_graphs(G):
             figure=graphs.plot_topic_distribution_across_network()
         ),
         dcc.Graph(
-            id='engagement_by_topic',
-            figure=graphs.plot_node_engagement_by_topic()
-        ),
-        dcc.Graph(
             id='topic_msg_distribution',
             figure=graphs.plot_topic_distribution_in_messages()
+        ),
+        dcc.Graph(
+            id='eng_by_topic_authenticity',
+            figure=graphs.plot_engagement_by_topic_and_authenticity()
         )
     ]
 

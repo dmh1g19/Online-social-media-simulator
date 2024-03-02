@@ -235,44 +235,9 @@ class Plotter:
         counts = list(topic_counts.values())
 
         fig = go.Figure([go.Bar(x=topics, y=counts, marker_color='indianred')])
-        fig.update_layout(title_text='Topic Distribution Across the Network',
+        fig.update_layout(title_text='Topic Distribution Across the Network for each user/node',
                           xaxis_title="Topics",
                           yaxis_title="Count of Nodes",
-                          template="plotly_white")
-        return fig
-
-    def plot_node_engagement_by_topic(self):
-        # Dynamically extract topics from message data
-        topics_set = set()
-        for _, data in self.G.nodes(data=True):
-            for msg in data.get('messages', []):
-                if 'topic' in msg:
-                    topics_set.add(msg['topic'])
-        
-        topics = list(topics_set)
-    
-        # Initialize a dictionary to hold total engagement and message count for each topic
-        topic_engagement = {topic: {'total_engagement': 0, 'message_count': 0} for topic in topics}
-    
-        # Aggregate engagement data for each topic
-        for _, data in self.G.nodes(data=True):
-            for msg in data.get('messages', []):
-                if msg['topic'] in topic_engagement:
-                    topic_engagement[msg['topic']]['total_engagement'] += msg['engagement']
-                    topic_engagement[msg['topic']]['message_count'] += 1
-    
-        # Calculate average engagement for each topic
-        avg_engagement_by_topic = {topic: engagement['total_engagement'] / engagement['message_count'] if engagement['message_count'] > 0 else 0 
-                                   for topic, engagement in topic_engagement.items()}
-    
-        # Prepare data for plotting
-        topics = list(avg_engagement_by_topic.keys())
-        avg_engagements = list(avg_engagement_by_topic.values())
-    
-        fig = go.Figure([go.Bar(x=topics, y=avg_engagements, marker_color='indianred')])
-        fig.update_layout(title_text='Average Engagement by Topic Across the Network',
-                          xaxis_title="Topic",
-                          yaxis_title="Average Engagement",
                           template="plotly_white")
         return fig
 
@@ -294,5 +259,35 @@ class Plotter:
             yaxis_title="Message Count",
             template="plotly_white"
         )
+        return fig
+   
+    def plot_engagement_by_topic_and_authenticity(self):
+        topic_engagement_authentic = collections.defaultdict(list)
+        topic_engagement_inauthentic = collections.defaultdict(list)
+    
+        # Aggregate engagement values by topic for authentic and inauthentic nodes
+        for n, data in self.G.nodes(data=True):
+            is_inauthentic = data.get('inauthentic', False)
+            for msg in data.get('messages', []):
+                if is_inauthentic:
+                    topic_engagement_inauthentic[msg['topic']].append(msg['engagement'])
+                else:
+                    topic_engagement_authentic[msg['topic']].append(msg['engagement'])
+    
+        # Calculate average engagement for each topic
+        avg_engagement_authentic = {topic: np.mean(engagements) for topic, engagements in topic_engagement_authentic.items()}
+        avg_engagement_inauthentic = {topic: np.mean(engagements) for topic, engagements in topic_engagement_inauthentic.items()}
+    
+        topics = list(set(avg_engagement_authentic.keys()) | set(avg_engagement_inauthentic.keys()))
+        avg_authentic = [avg_engagement_authentic.get(topic, 0) for topic in topics]
+        avg_inauthentic = [avg_engagement_inauthentic.get(topic, 0) for topic in topics]
+    
+        # Create scatter plot
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=topics, y=avg_authentic, mode='markers', name='Authentic', marker=dict(color='blue', size=10)))
+        fig.add_trace(go.Scatter(x=topics, y=avg_inauthentic, mode='markers', name='Inauthentic', marker=dict(color='red', size=10)))
+    
+        fig.update_layout(title='Average Engagement by Topic and Authenticity', xaxis_title='Topic', yaxis_title='Average Engagement', template='plotly_white')
+        
         return fig
     

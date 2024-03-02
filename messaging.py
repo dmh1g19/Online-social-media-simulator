@@ -9,7 +9,7 @@ CURRENT_TIME_STEP = 0
 
 
 TOPICS = ["left_wing", "right_wing", "cars", "charity", "planes", "travel", "tech"]
-TOPIC_WEIGHTS = [0.10, 0.20, 0.1, 0.05, 0.05, 0.2, 0.3] 
+TOPIC_WEIGHTS = [0.4, 0.3, 0.05, 0.05, 0.1, 0.05, 0.05] 
 
 def generate_messages(G, num_messages, deception, time_step, finite_attention, flooding_factor, use_topic_based_resharing):
     """
@@ -39,7 +39,11 @@ def generate_messages(G, num_messages, deception, time_step, finite_attention, f
 
             if inauthentic:
                 base_quality = 0 # Set to constant 0, could restrict quality based on a lower rand shreshold?
-                engagement = min(base_quality + deception, 1.0)
+
+                if use_topic_based_resharing:
+                    engagement = min(base_quality + deception, 1.0) * topic_weight
+                else:
+                    engagement = min(base_quality + deception, 1.0)
 
                 quality = base_quality
             else:
