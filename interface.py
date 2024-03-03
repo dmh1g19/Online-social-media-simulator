@@ -6,7 +6,6 @@ import plotly.graph_objects as go
 
 from dash.dependencies import Input, Output
 from dash import callback_context
-from plotting import *
 from dash import dcc, html
 from interface_help import get_help_info
 from interface_network_graphs import get_network_graphs
@@ -27,8 +26,6 @@ def run_server(app):
     app.run_server(debug=True)
 
 def make_layout(G, app):
-    graphs = Plotter(G)
-
     # Convert the JSON data from nx.node_link_data(G) to the correct format for visdcc, including colors
     nodes_data = nx.node_link_data(G)['nodes']
     links_data = nx.node_link_data(G)['links']

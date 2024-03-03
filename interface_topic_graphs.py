@@ -1,8 +1,8 @@
 from dash import dcc
-from plotting import *
+from plotter_topics import *
 
 def get_topic_graphs(G):
-    graphs = Plotter(G)
+    graphs = PlotterTopic(G)
 
     new_graphs = [
         dcc.Graph(

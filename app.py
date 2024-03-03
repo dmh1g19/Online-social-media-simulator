@@ -1,5 +1,4 @@
 from network import *
-from plotting import *
 from messaging import *
 from interface import *
 from topic_distribution import *

@@ -1,9 +1,9 @@
 from dash import dcc
-from plotting import *
+from plotter_messages import *
 
 
 def get_messages_graphs(G):
-    graphs = Plotter(G)
+    graphs = PlotterMessage(G)
 
     new_graphs = [
         dcc.Graph(

@@ -3,13 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from topic_distribution import *
+from topics import *
 
 
 CURRENT_TIME_STEP = 0 
-
-
-TOPICS = ["left_wing", "right_wing", "cars", "charity", "planes", "travel", "tech"]
-TOPIC_WEIGHTS = [0.4, 0.3, 0.05, 0.05, 0.1, 0.05, 0.05] 
 
 def generate_messages(G, num_messages, deception, time_step, finite_attention, flooding_factor, use_topic_based_resharing):
     """

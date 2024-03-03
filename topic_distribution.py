@@ -1,9 +1,7 @@
 import numpy as np
 import networkx as nx
+from topics import *
 
-
-TOPICS = ["left_wing", "right_wing", "cars", "charity", "planes", "travel", "tech"]
-TOPIC_WEIGHTS = [0.4, 0.3, 0.05, 0.05, 0.1, 0.05, 0.05] 
 
 def assign_topic_distributions(G):
     """

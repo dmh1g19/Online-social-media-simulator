@@ -1,8 +1,8 @@
 from dash import dcc
-from plotting import *
+from plotter_network import *
 
 def get_network_graphs(G):
-    graphs = Plotter(G)
+    graphs = PlotterNetwork(G)
 
     new_graphs = [
         dcc.Graph(
