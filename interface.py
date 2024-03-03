@@ -67,7 +67,7 @@ def make_layout(G, app):
                         id='messages-button-2', 
                         className='hover-effect',
                         style={'right': '70px'},
-                        children=html.Div([html.Img(src='/assets/bubble.svg', style={'height': '50px', 'width': '50px'})])
+                        children=html.Div([html.Img(src='/assets/topic_bubble.svg', style={'height': '50px', 'width': '50px'})])
                     ),
                 html.Div(
                         id='help-button', 
