@@ -5,8 +5,6 @@ from topic_distribution import *
 
 def main():
     """
-    The entry point for the application.
-
     n: Number of authentic nodes nodes to initialize the network
     beta: Number of inauthentic nodes in relation to authentic
     gamma: Amount of influence of inauthentic nodes (how any inauthentic nodes are followed by authentic ones, aka 'infiltration')
@@ -16,19 +14,21 @@ def main():
     m: Set amount of authentic nodes to follow by each inauthentic node (currently static)
     flooding_factor: Factor by which inauthentic nodes increase their message output to simulate flooding
     steps: The amount of time instances measured in steps from 1 to n
+    msgs_per_step: How many messages to generate for each node per simulate_time_steps
+    topic_similarity: Include topic bias in the similation
     """
 
-    n = 40
+    n = 25
     beta = 0.7
     gamma = 0.25 
-    finite_attention = 100
+    finite_attention = 160
     theta = 0.5
     mu = 0.55
     steps = 25
     msgs_per_step = 1
     flooding_factor = 1
     m = 4 #TODO: Integrate this parameter 
-    topic_similarity = True
+    topic_similarity = True 
 
     G = create_authentic_subnetwork(n, beta)
     add_inauthentic_subnetwork(G, beta, m)

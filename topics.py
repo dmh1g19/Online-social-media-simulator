@@ -1,4 +1,4 @@
-#TODO: Generate more complex distribution
+#TODO: Generate more complex distribution, dynamic weights
 
 TOPICS = ["left_wing", "right_wing", "cars", "charity", "planes", "travel", "tech"]
 

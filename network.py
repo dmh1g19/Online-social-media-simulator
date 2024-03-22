@@ -6,6 +6,7 @@ import numpy as np
 def create_authentic_subnetwork(n, beta):
     """
     Create a subnetwork of authentic nodes.
+
     n: Number of authentic nodes
     beta: Proportion of inauthentic nodes to authentic nodes
     """
@@ -22,6 +23,7 @@ def add_inauthentic_subnetwork(G, beta, m):
 
     G_authentic: The existing network of authentic nodes
     beta: Proportion of inauthentic nodes to authentic nodes
+    m: For simplicity, connect each inauthentic node to `m` random authentic nodes (m edges from inauthentic to authentic nodes)
     """
 
     n_authentic = len(G)
@@ -30,7 +32,6 @@ def add_inauthentic_subnetwork(G, beta, m):
     for i in range(n_authentic, n_authentic + n_inauthentic, m):
         G.add_node(i, inauthentic=True)
         
-        # For simplicity, connect each inauthentic node to `m` random authentic nodes (m edges from inauthentic to authentic nodes)
         #TODO: Randomize m?
         targets = np.random.choice(n_authentic, m, replace=False)
         for target in targets:

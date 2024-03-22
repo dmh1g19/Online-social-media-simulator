@@ -68,7 +68,7 @@ class PlotterTopic:
         avg_inauthentic = [avg_engagement_inauthentic.get(topic, 0) for topic in topics]
     
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=topics, y=avg_authentic, mode='markers', name='Authentic', marker=dict(color='blue', size=10)))
+        #fig.add_trace(go.Scatter(x=topics, y=avg_authentic, mode='markers', name='Authentic', marker=dict(color='blue', size=10)))
         fig.add_trace(go.Scatter(x=topics, y=avg_inauthentic, mode='markers', name='Inauthentic', marker=dict(color='red', size=10)))
     
         fig.update_layout(title='Average Engagement by Topic and Authenticity', xaxis_title='Topic', yaxis_title='Average Engagement', template='plotly_white')
