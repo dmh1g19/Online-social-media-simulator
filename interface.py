@@ -115,6 +115,7 @@ def register_callbacks(app, G):
         if selection is not None and 'nodes' in selection and len(selection['nodes']) > 0:
             node_id = selection['nodes'][0]
             messages = G.nodes[node_id].get('messages', [])
+            topic = G.nodes[node_id].get('topic')
             inauthentic = G.nodes[node_id].get('inauthentic', False)
             
             if messages:  
@@ -135,6 +136,7 @@ def register_callbacks(app, G):
             
             node_info_display = html.Div([
                 html.P(f"Node {node_id} - {'Inauthentic' if inauthentic else 'Authentic'}"),
+                html.P(f"Topic: {topic}"),
                 html.P(f"Total messages: {len(messages)}"),
                 html.P(f"Average Quality: {avg_appeal:.2f}"),
                 html.P(f"Average Engagement: {avg_engagement:.2f}")

@@ -40,7 +40,7 @@ body {
     border: 2px solid #ddd;
     z-index: 1000;
     max-height: 200px;
-    overflow-y: hidden;
+    overflow-y: auto;
     height: 170px;
     width: 100px;
 }
