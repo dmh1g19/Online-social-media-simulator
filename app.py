@@ -18,13 +18,13 @@ def main():
     topic_similarity: Include topic bias in the similation
     """
 
-    n = 25
+    n = 35
     beta = 0.7
     gamma = 0.25 
     finite_attention = 160
     theta = 0.5
     mu = 0.55
-    steps = 25
+    steps = 20
     msgs_per_step = 1
     flooding_factor = 1
     m = 4 #TODO: Integrate this parameter 
