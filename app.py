@@ -2,6 +2,7 @@ from network import *
 from messaging import *
 from interface import *
 from topic_distribution import *
+from data_extraction import *
 
 def main():
     """
@@ -35,6 +36,9 @@ def main():
     simulate_infiltration(G, gamma)
     assign_topic_distributions(G)
     simulate_time_steps(G, steps, msgs_per_step, theta, finite_attention, mu, flooding_factor, topic_similarity)
+
+    extractor = DataExtractor(G)
+    extractor.save_as_csv("data.csv")
 
     app = create_dash_app()
     make_layout(G, app)
