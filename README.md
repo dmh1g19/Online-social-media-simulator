@@ -1,4 +1,4 @@
-# Network Simulation for Information Diffusion
+# Network Simulation for information diffusion in social media networks to detect and explore bot behaviour
 
 ## Overview
 
